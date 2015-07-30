@@ -21,10 +21,11 @@ var MovieSearch = React.createClass({
   render: function() {
     return (
       <TabBarIOS 
-        tintColor="white"
-        barTintColor="blue">
+        tintColor="purple"
+        barTintColor="white">
         <TabBarIOS.Item title="Search Tab"
           selected={this.state.selectedTab === 'search'}
+          icon={{uri:'search'}}
           onPress={() => {
             this.setState({
               selectedTab: 'search',
@@ -35,6 +36,7 @@ var MovieSearch = React.createClass({
 
         <TabBarIOS.Item 
           title="Featured"
+          icon={{uri:'featured'}}
           selected={this.state.selectedTab === 'featured'}
           onPress={() => {
             this.setState({
