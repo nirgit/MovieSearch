@@ -51,10 +51,8 @@ var MovieSearch = React.createClass({
         return <View style={styles.container}><Text>'Loading'</Text></View>;
       }
       return (
-        <View style={styles.container}>
           <ListView
           dataSource={this.state.movies} renderRow={(movie) => this.renderRow(movie)} />
-        </View>
         );
     },
 
