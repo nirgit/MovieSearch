@@ -22,22 +22,26 @@ var {
     StyleSheet,
     Text,
     View,
-    Image
+    Image,
+    ListView
 } = React;
 
 var MovieSearch = React.createClass({
     getInitialState: function() {
+    this.ds = new ListView.DataSource({rowHasChanged: (r1, r2) => r1 !== r2});
       return {
         movies: null
       };
     },
 
     componentWillMount: function() {
+      var $this = this;
       fetch(REQUEST_URL)
       .then((response) => response.json())
       .then((responseData) => {
+        console.log(responseData.movies.length);
         this.setState({
-          movies: responseData.movies,
+          movies: $this.ds.cloneWithRows(responseData.movies),
         });
       }).done();
     },
@@ -48,13 +52,22 @@ var MovieSearch = React.createClass({
       }
       return (
         <View style={styles.container}>
+          <ListView
+          dataSource={this.state.movies} renderRow={(movie) => this.renderRow(movie)} />
+        </View>
+        );
+    },
+
+    renderRow: function(movie) {
+      return (
+        <View style={styles.container} >
           <View style={styles.movieThumbContainer}>
             <Image style={styles.movieThumb} 
-                   source={{uri: this.state.movies[0].posters.thumbnail}} />
+                   source={{uri: movie.posters.thumbnail}} />
           </View>
           <View style={styles.movieDescription}>
-            <Text>{this.state.movies[0].title}</Text>
-            <Text>{this.state.movies[0].year}</Text>
+            <Text>{movie.title}</Text>
+            <Text>{movie.year}</Text>
           </View>
         </View>
         );
@@ -64,13 +77,13 @@ var MovieSearch = React.createClass({
 var styles = StyleSheet.create({
     container: {
         flex: 1,
-        justifyContent: 'center',
         alignItems: 'center',
         backgroundColor: '#F5FCFF',
         flexDirection: 'row'
     },
     movieDescription: {
       height: 100,
+      left: 0,
       justifyContent: 'space-around'
     },
     movieThumbContainer: {
